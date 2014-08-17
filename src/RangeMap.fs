@@ -24,17 +24,17 @@ module RangeMap =
             member this.Map<'U> (f: 'V -> 'U) = fromTree <| map f tree
         }
 
-    /// Builds a range map from a sequence of key and value pairs.
+    /// Builds a range map from a sequence of key-value pairs.
     let fromSeq<'K,'V when 'K : comparison> (xs : seq<'K * 'V>) =
         xs |> fromSeq |> fromTree
 
-    /// Empty range map
+    /// Empty range map.
     let empty<'K,'V when 'K : comparison> : IRangeMap<'K,'V> = fromSeq []
     
     /// Maps over all elements.
     let inline map f (rm: IRangeMap<'K, 'V>) = rm.Map f
 
-    /// Extracts all key value pairs from a range map.
+    /// Extracts all key-value pairs from a range map.
     let inline elements (rm: IRangeMap<'K,'V>) = rm.Elements()
 
     /// Tries to find the value of an element with the given key.

@@ -4,7 +4,6 @@ module Main =
 
     open Utils
     open FSharp.Data.RangeMap
-
     module RM = FSharp.Data.RangeMap.RangeMap
 
     [<EntryPoint>]
@@ -37,13 +36,12 @@ module Main =
                 |> List.ofSeq
             fun (f: int -> unit) -> Seq.iter f keys
 
-        // let withRange =
-
         // Iterate over 10K randomly selected random keys (not likely to exist)
         let withNonExistingKeys =
             let keys = randList 10000
             fun (f: int -> unit) -> Seq.iter f keys
 
+        // Compare map, range map and dictionary performance.
         let res =
             [
                 // Lookup existing keys
@@ -65,18 +63,10 @@ module Main =
                 // Remove existing key
                 "Remove existing key from map", fun _ ->
                     withExistingKeys (fun key -> Map.remove key map |> ignore)
-
                 "Remove existing key from range map", fun _ ->
                     withExistingKeys (fun key -> RM.remove key rm |> ignore)
-
-                // Lookup range
-
-
             ]
             |> benchmark 100
-
         for (name, time) in res do
             printfn "%s: %A" name time
-
-
-        0 // return an integer exit code
+        0

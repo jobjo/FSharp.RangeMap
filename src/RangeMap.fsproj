@@ -54,7 +54,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces.fs" />
     <Compile Include="Tree.fsi" />
     <Compile Include="Tree.fs" />
     <Compile Include="RangeMap.fsi" />

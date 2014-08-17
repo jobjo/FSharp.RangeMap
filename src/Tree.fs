@@ -26,14 +26,14 @@
         | Leaf              -> 1uy
         | Node (_,h,_,_)    -> h
 
-    /// Balance of zero. Shifted since byte are unsigned.
+    /// Balance is the difference between the left and right height of the
+    /// subtrees of a node.
     let zeroBalance = 0
     let lowBalance = -2
     let highBalance = 2
 
     /// Builds a node
-    let inline node kv l r = 
-        Node (kv, byte 1 + max (height l) (height r), l, r)
+    let inline node kv l r = Node (kv, byte 1 + max (height l) (height r), l, r)
 
     /// Balance of a tree is the difference of height of left and right branch.
     let inline balance tree =
@@ -45,9 +45,7 @@
     let inline rotateLeft tree =
         match tree with
         | Node (kv,h,l, Node (rkv,rh,rl,rr))    ->
-            let lh = 1uy + max (height l) (height rl)
-            let h' = 1uy + max lh (height rr)
-            Node(rkv,h', Node(kv,lh,l,rl), rr)
+            node rkv (node kv l rl) rr
         | _ as tree                             ->
             tree
 
@@ -55,9 +53,7 @@
     let inline rotateRight tree =
         match tree with
         | Node (kv,h,Node (lkv,lh,ll,lr), r)    ->
-            let lh = 1uy + max (height lr) (height r)
-            let h' = 1uy + max (height ll) lh
-            Node(lkv,h', ll, Node(kv,lh,lr,r))
+            node lkv ll ( node kv lr r)
         | _ as tree                             ->
             tree
 
@@ -111,11 +107,11 @@
     let insert<'K,'V when 'K : comparison> (k: 'K) (v: 'V) (tree: Tree<'K,'V>) : Tree<'K, 'V> =
         insertGeneric compare<'K> k v tree
 
-    /// Builds a tree from a sequence of key-value pairs.
-    // let fromSeqGeneric compare kvs = Seq.fold (fun t (k,v) -> insertGeneric compare k v t) Leaf  kvs
+    /// Builds a tree from a sequence, using the provided comparison function for ordering.
     let fromSeqGeneric compare kvs =
         Seq.fold (fun t (k,v) -> insertGeneric compare k v t) Leaf  kvs
 
+    /// Builds a tree from a sequence. Require comparison.
     let fromSeq<'K,'V when 'K : comparison> (kvs: seq<'K * 'V>) : Tree<'K,'V> =
         fromSeqGeneric compare<'K> kvs
 
@@ -149,11 +145,11 @@
                         cont (kv', balanceTree tree)
             go tree id
         match l, r with
-        | Leaf, _                                   ->
+        | Leaf, _   ->
             r
-        | _, Leaf                                   ->
+        | _, Leaf   ->
             l
-        | l, r  ->
+        | l, r      ->
             if height l <= height r then
                 let (kv', l') = removeLargest l
                 node kv' l' r
