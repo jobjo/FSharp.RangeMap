@@ -7,23 +7,23 @@ Usage
 `RangeMap`s can be created by using the `fromSeq` function. Here's and example defining a range-map holding 10000
 values with integer keys and string values:
 
-``fsharp
+```fsharp
     > open FSharp.Data.RangeMap
     > let myMap = fromSeq <| List.init 10000 (fun ix -> (ix, string ix))
     val myMap : IRangeMap<int,string>
     
-``
+```
 
 To lookup an element by it's key, use the function `lookup`:
 
-``fsharp
+```fsharp
     > let res = lookup 1024 myMap;;
     val res : string option = Some "1024"
     
     > let res2 = lookup -2000 myMap;;
     val res2 : string option = None
     
-``
+```
 
 As seen in the example above, looking up a non-existing key yields the result `None`.
 
