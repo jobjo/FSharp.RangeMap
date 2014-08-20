@@ -103,40 +103,40 @@ The following table shows the total time for looking up 10000 existing keys from
 generated using randdom integer keys:
 
 
-Comments                                         | Time (s)  |
---------------------------------------------------------------
-Lookup 10K existing keys from standar map        | 0.002713  |
---------------------------------------------------------------
-Lookup 10K existing keys from range-map          | 0.002183  |
--------------------------------------------------------------
-Lookup 10K existing keys from dictionary         | 0.003557  |
---------------------------------------------------------------
+| Comments                                         | Time (s)  |
+|--------------------------------------------------------------
+| Lookup 10K existing keys from standar map        | 0.002713  |
+|--------------------------------------------------------------
+| Lookup 10K existing keys from range-map          | 0.002183  |
+| -------------------------------------------------------------
+| Lookup 10K existing keys from dictionary         | 0.003557  |
+| --------------------------------------------------------------
 
 What's interesting here are the relative times. As can be seen RangeMap is fast than both `Dictionary` and `Map`.
 
 
 The next table instead show the total time of looking up non-existing keys:
 
-Comments                                             | Time (s)  |
-------------------------------------------------------------------
-Lookup 10K non-existing keys from map                | 0.002947  |
---------------------------------------------------------------
-Lookup 10K non-existing keys from range-map          | 0.002185  |
---------------------------------------------------------------
-Lookup 10K non-existing keys from dictionary         | 0.001808  |
-------------------------------------------------------------------
+| Comments                                             | Time (s)  |
+| ------------------------------------------------------------------
+| Lookup 10K non-existing keys from map                | 0.002947  |
+| --------------------------------------------------------------
+| Lookup 10K non-existing keys from range-map          | 0.002185  |
+| --------------------------------------------------------------
+|Lookup 10K non-existing keys from dictionary          | 0.001808  |
+| ------------------------------------------------------------------
 
 This time `Dictionary` is faster and the ration between `RangeMap` and `Map` is similar.
 
 
 Building and removing elements from `RangeMap`s are consdirebly slower than the equivalent functions on `Map`:
 
-Comments                                             | Time (s)
------------------------------------------------------------------
-Remove 10K existing keysfrom map                     | 0.013238  |
------------------------------------------------------------------
-Remove 10K existing key from range map               | 0.060113  |
------------------------------------------------------------------
+| Comments                                             | Time (s)  | 
+| -----------------------------------------------------------------
+| Remove 10K existing keysfrom map                     | 0.013238  |
+|-----------------------------------------------------------------
+| Remove 10K existing key from range map               | 0.060113  |
+| -----------------------------------------------------------------
 
 To see the detail of the above results, have a look at the `examples` project. 
 
