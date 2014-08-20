@@ -1,6 +1,6 @@
 FSharp.RangeMap
 ===============
-`RangeMap` is an immutable key-value data store similar to FSharp `Map`. The most important difference, compared to the `Map` interface, is the ability to efficiently lookup values from a range of keys. `RangeMap`s seems perform slightly better than `Map`s for looking up single elements but are considerably slower when *inserting* and *removing* elements.
+*RangeMap* is an immutable key-value data store similar to FSharp `Map`. The most important difference, compared to the `Map` interface, is the ability to efficiently look up values from a range of keys. *RangeMap* seems to perform slightly better than `Map` for looking up elements. It is considerably slower when it comes to *inserting* and *removing* elements.
 
 
 Usage
@@ -13,7 +13,7 @@ Usage
 val myMap : IRangeMap<int,string>
 ```
 
-To lookup a single element by it's key, the function `lookup` is provided:
+To lookup a single element by its key, the function `lookup` is provided:
 
 ```fsharp
 > let res = lookup 1024 myMap;;
@@ -35,14 +35,14 @@ val containsFive : bool = true
 val containsMinusFive : bool = false
 ```
 
-It's also possible to lookup elements by a range of keys. Here is an example of fiding all elements with keys within the range 5 to 10:
+Elements may also be retrieved by providing a range of keys. Here is an example of fiding all elements with keys between 5 and 10 (including 5 and 10):
 
 ```fsharp
 > let res = lookupRange (Some 5) (Some 10) myMap;;
 val res : string list = ["5"; "6"; "7"; "8"; "9"; "10"]
 ```
 
-The first two parameters to `lookupRange` are optional values indicating the lower and higher bounds.
+The first two parameters to `lookupRange` are optional values specifying the lower and upper bounds.
 
 
 `IRangeMap`s can be extend by inserting elements using the function `insert`:
@@ -56,6 +56,7 @@ val res : string option = Some "Minus five"
 ```
 
 Elementes may be be removed with `remove`:
+
 ```fsharp
 > let myMap = remove 5 myMap;;
 val myMap : IRangeMap<int,string>
@@ -64,7 +65,7 @@ val myMap : IRangeMap<int,string>
 val containsFive : bool = false
 ```
 
-There is also the possibility to remove elements for given a range of key values:
+It is also possible to remove elements for given a range of key values:
 
 ```fsharp
 > let myMap = removeRange (Some 1) (Some 20) myMap;;
@@ -92,12 +93,11 @@ The following invariant holds for any `RangeMap` `rm` and feasible function `f`:
 
 Perforamce
 --------------------
-Inital benchmarking indicates that `FSharp.RangeMap` on par with or faster than the standard FSharp `Map` implementation in terms of looking up elements using the `lookup` function. 
+Inital benchmarking indicates that `FSharp.RangeMap` is on par with, or faster than the standard FSharp `Map` implementation in terms of looking up elements using the `lookup` function. 
 
-Below are some result of comparing lookup for Fharp `Map`, `RangeMap` and standard .NET dictionaries. 
+Below are some result of comparing lookup for Fharp `Map`, `RangeMap` and standard .NET dictionaries. Have a look at the *examples project* for details.
 
-The following table shows the total time for looking up 10000 existing keys from collections holding 100000 elements
-generated using random integer keys:
+The following table shows the average total time for looking up 10000 existing keys from collections holding 100000 elements, generated using random integer as keys:
 
 
 | Operation                                        | Time (s)  |
@@ -107,10 +107,11 @@ generated using random integer keys:
 | Lookup 10K existing keys from dictionary         | 0.0036    |
 
 
-What is interesting here are the relative times. As can be seen RangeMap is fast than both `Dictionary` and `Map`.
+What is interesting here are the relative times. As can be seen *RangeMap* is fast than both *Dictionary* and *Map*.
 
 
-The next table shows the total time of looking up non-existing keys for the same collections:
+The next table displays the total time of looking up non-existing keys for the same collections:
+
 
 | Operation                                            | Time (s)  |
 |:-----------------------------------------------------|----------:|
@@ -121,14 +122,14 @@ The next table shows the total time of looking up non-existing keys for the same
 This time `Dictionary` is faster. The values for `RangeMap` and `Map` are not significantly affected.
 
 
-Building and removing elements from `RangeMap`s are considerably slower than the equivalent functions on `Map`:
+The next table reveals that building and removing elements from `RangeMap`s are considerably slower than the equivalent functions on *Maps*.
 
 | Operation                                            | Time (s)  | 
 |:-----------------------------------------------------|----------:|
 | Remove 10K existing keysfrom map                     | 0.0132    |
 | Remove 10K existing key from range map               | 0.0601    |
 
-To see the detail of the above results, have a look at the `examples` project. 
+
 
 
 Implementation
