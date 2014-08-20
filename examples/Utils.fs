@@ -1,15 +1,14 @@
 ﻿namespace FSharp.RangeMap.Examples
 
-module Utils =
+module internal Utils =
 
-    // Measure time
     let time f =
         let sw = new System.Diagnostics.Stopwatch()
         sw.Start();
         let x = f ()
         sw.Stop();
         let ts = sw.Elapsed;
-        x,  System.Math.Round(ts.TotalMilliseconds / 1000., 2)
+        x,  System.Math.Round(ts.TotalMilliseconds / 1000., 4)
 
     let rec repeate n f = if n <= 0 then () else f () ; repeate (n-1) f
 
@@ -24,6 +23,36 @@ module Utils =
         let r = System.Random()
         List.sortBy (fun _ -> r.Next()) xs
 
-    let randList n =
+    let randomList n =
         let r = System.Random ()
         [for _ in [1..n] do yield r.Next()]
+
+    let printTable = function
+        | row :: _ as rows   ->
+            let replicate s n = System.String.Join (s, List.replicate n "")
+            let numCols = List.length row
+            let maxColLengths =
+                [
+                    for cIx in [0 .. numCols - 1] do
+                        yield Seq.max <| [for row in rows do yield Seq.length <| row.[cIx]]
+                ]
+            let colSpace = 3
+            let rowLine = replicate "-" <| List.sum maxColLengths + (numCols * (1 + colSpace))
+            for row in rows do
+                for (col,maxLength) in List.zip row maxColLengths do
+                    let colLenght = Seq.length col
+                    let space = replicate " " <| colSpace + maxLength - colLenght
+                    printf "%s%s| " col space
+                printfn ""
+                printfn "%s" rowLine
+        | _                     ->
+            ()
+
+    let printLabelTimeResults (results: seq<list<string * float>>) =
+        let res =
+            ([], results)
+            ||> Seq.fold (fun rows res -> 
+                let ys = res |> List.map (fun (name, time) -> [name; string time]) 
+                rows @ [["";""]] @ ys
+            )
+        printTable (["Label"; "Time (s)"] :: res)
