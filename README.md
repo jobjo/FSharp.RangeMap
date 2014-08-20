@@ -1,6 +1,6 @@
 FSharp.RangeMap
 ===============
-`RangeMap` is an immutable key-value data store similar to FSharp `Map`. The most important difference, compared to the `Map` interface, is the ability to efficently lookup values from a range of keys. `RangeMap`s seems perform slightly better than `Map`s for looking up single elements but are considerebly slower when *inserting* and *removing* elements.
+`RangeMap` is an immutable key-value data store similar to FSharp `Map`. The most important difference, compared to the `Map` interface, is the ability to efficiently lookup values from a range of keys. `RangeMap`s seems perform slightly better than `Map`s for looking up single elements but are considerably slower when *inserting* and *removing* elements.
 
 
 Usage
@@ -25,7 +25,7 @@ val res2 : string option = None
 
 As seen in the example above, looking up a non-existing key yields the result `None`.
 
-The existense of a key can be be tested using `containsKey`:
+The existence of a key can be be tested using `containsKey`:
 
 ```fsharp
 > let containsFive = containsKey 5 myMap;;
@@ -92,12 +92,12 @@ The following invariant holds for any `RangeMap` `rm` and feasible function `f`:
 
 Perforamce
 --------------------
-Inital benchmarking indicats that `FSharp.RangeMap` on par with or faster than the standard FSharp `Map` implementation in terms of looking up elements using the `lookup` function. 
+Inital benchmarking indicates that `FSharp.RangeMap` on par with or faster than the standard FSharp `Map` implementation in terms of looking up elements using the `lookup` function. 
 
 Below are some result of comparing lookup for Fharp `Map`, `RangeMap` and standard .NET dictionaries. 
 
 The following table shows the total time for looking up 10000 existing keys from collections holding 100000 elements
-generated using randdom integer keys:
+generated using random integer keys:
 
 
 | Operation                                        | Time (s)  |
@@ -121,7 +121,7 @@ The next table shows the total time of looking up non-existing keys for the same
 This time `Dictionary` is faster. The values for `RangeMap` and `Map` are not significantly affected.
 
 
-Building and removing elements from `RangeMap`s are consdirebly slower than the equivalent functions on `Map`:
+Building and removing elements from `RangeMap`s are considerably slower than the equivalent functions on `Map`:
 
 | Operation                                            | Time (s)  | 
 |:-----------------------------------------------------|----------:|
