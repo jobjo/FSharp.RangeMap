@@ -12,7 +12,6 @@ values with integer keys and string values:
     > let myMap = fromSeq <| List.init 10000 (fun ix -> (ix, string ix))
     val myMap : IRangeMap<int,string>
     
-    
 ``
 
 To lookup an element by it's key, use the function `lookup`:
@@ -25,6 +24,7 @@ To lookup an element by it's key, use the function `lookup`:
     val res2 : string option = None
     
 ``
+
 As seen in the example above, looking up a non-existing key yields the result `None`.
 
 
