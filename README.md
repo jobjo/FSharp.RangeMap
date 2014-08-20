@@ -89,9 +89,7 @@ The following invariant holds for any `RangeMap` `rm` and feasible function `f`:
 ```fhsarp
 (map f >> elements) = (elements >> List.map (fun (k,v) -> (k, f v)))`
 ```
-
-
-Perforamce
+Performance
 --------------------
 Inital benchmarking indicates that `FSharp.RangeMap` is on par with, or faster than the standard FSharp `Map` implementation in terms of looking up elements using the `lookup` function. 
 
