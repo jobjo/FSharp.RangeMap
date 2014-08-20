@@ -104,13 +104,11 @@ generated using randdom integer keys:
 
 
 | Comments                                         | Time (s)  |
-|--------------------------------------------------------------
+|--------------------------------------------------|----------:|
 | Lookup 10K existing keys from standar map        | 0.002713  |
-|--------------------------------------------------------------
 | Lookup 10K existing keys from range-map          | 0.002183  |
-| -------------------------------------------------------------
 | Lookup 10K existing keys from dictionary         | 0.003557  |
-| --------------------------------------------------------------
+
 
 What's interesting here are the relative times. As can be seen RangeMap is fast than both `Dictionary` and `Map`.
 
