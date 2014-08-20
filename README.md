@@ -1,6 +1,6 @@
 FSharp.RangeMap
 ===============
-RangeMap is an immutable key-value data store similar to FSharp `Map`. The most important difference, comparing with the `Map` interface is the ability to efficently lookup values given range of keys. `RangeMap`s seem to have slightly better peformance than `Map`s for looking single elements and are considerebly slower for *inserting* and *removing* elements.
+RangeMap is an immutable key-value data store similar to FSharp `Map`. The most important difference compared to the `Map` interface, is the ability to efficently lookup values from a range of keys. `RangeMap`s seems perform slightly better than `Map`s for looking up single elements but are considerebly slower when *inserting* and *removing* elements.
 
 
 Usage
