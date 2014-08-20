@@ -1,11 +1,12 @@
 FSharp.RangeMap
 ===============
-RangeMap is a key-value data store also supporting fast retrievel of element within a range of keys. 
+RangeMap is an immutable key-value data store similar to FSharp `Map`. The most important difference, comparing with the `Map` interface is the ability to efficently lookup values given range of keys. `RangeMap`s seem to have slightly better peformance than `Map`s for looking single elements and are considerebly slower for *inserting* and *removing* elements.
+
 
 Usage
 ---------
-`RangeMap`s can be created by using the `fromSeq` function. Here's and example defining a range-map holding 10000
-values with integer keys and string values:
+`IRangeMap` values can be created by using the `fromSeq` function. Here's and example defining a range-map holding 10000 values with integer keys and string values:
+
 ```fsharp
 > open FSharp.Data.RangeMap
 > let myMap = fromSeq <| List.init 10000 (fun ix -> (ix, string ix))
@@ -14,6 +15,7 @@ val myMap : IRangeMap<int,string>
 ```
 
 To lookup a single element by it's key, the function `lookup` is provided:
+
 ```fsharp
 > let res = lookup 1024 myMap;;
 val res : string option = Some "1024"
@@ -24,7 +26,7 @@ val res2 : string option = None
 ```
 As seen in the example above, looking up a non-existing key yields the result `None`.
 
-The existense of a key can also be tested using `containsKey`:
+The existense of a key can be be tested using `containsKey`:
 
 ```fsharp
 > let containsFive = containsKey 5 myMap;;
@@ -46,7 +48,7 @@ val res : string list = ["5"; "6"; "7"; "8"; "9"; "10"]
 The first two parameters to `lookupRange` are optional values indicating the lower and higher bounds.
 
 
-`RangeMap`s can be extend by inserting elements using the function `insert`:
+`IRangeMap`s can be extend by inserting elements using the function `insert`:
 
 ```fsharp
 > let myMap = insert -5 "Minus five" myMap;;
@@ -56,7 +58,7 @@ val myMap : IRangeMap<int,string>
 val res : string option = Some "Minus five"
 ```
 
-Elementes can also be removed with `remove`:
+Elementes may be be removed with `remove`:
 ```fsharp
 > let myMap = remove 5 myMap;;
 val myMap : IRangeMap<int,string>
@@ -78,17 +80,73 @@ val contains20 : bool = false
 
 The function `elements` retrives all key-value pairs of `RangeMap` and is equivalent to `lookupRange None None`.
 
-To map over the values of the elements in a `RangeMap`, `map` is used:
+To map over the values of the elements in a `IRangeMap`, `map` is used:
 
 ```fsharp
 > let myMap2 = map Seq.length myMap;;
 val myMap2 : IRangeMap<int,int>
 ```fsharp
 
-The following invariant holds: `map f >> elements == elements >> List.map (fun (k,v) -> (k, f v))`.
+The following invariant holds for any `RangeMap` `rm` and feasible function `f`: 
+
+```fhsarp
+(map f >> elements) = (elements >> List.map (fun (k,v) -> (k, f v)))`
+```fsharp
+
+Perforamce
+--------------------
+Inital benchmarking indicats that `FSharp.RangeMap` on par with or faster than the standard FSharp `Map` implementation in terms of looking up elements using the `lookup` function. 
+
+Below are some result of comparing lookup for Fharp `Map`, `RangeMap` and standard .NET dictionaries. 
+
+The following table shows the total time for looking up 10000 existing keys from collections holding 100000 elements
+generated using randdom integer keys:
 
 
+Comments                                         | Time (s)  |
+--------------------------------------------------------------
+Lookup 10K existing keys from standar map        | 0.002713  |
+--------------------------------------------------------------
+Lookup 10K existing keys from range-map          | 0.002183  |
+-------------------------------------------------------------
+Lookup 10K existing keys from dictionary         | 0.003557  |
+--------------------------------------------------------------
 
+What's interesting here are the relative times. As can be seen RangeMap is fast than both `Dictionary` and `Map`.
+
+
+The next table instead show the total time of looking up non-existing keys:
+
+Comments                                             | Time (s)  |
+------------------------------------------------------------------
+Lookup 10K non-existing keys from map                | 0.002947  |
+--------------------------------------------------------------
+Lookup 10K non-existing keys from range-map          | 0.002185  |
+--------------------------------------------------------------
+Lookup 10K non-existing keys from dictionary         | 0.001808  |
+------------------------------------------------------------------
+
+This time `Dictionary` is faster and the ration between `RangeMap` and `Map` is similar.
+
+
+Building and removing elements from `RangeMap`s are consdirebly slower than the equivalent functions on `Map`:
+
+Comments                                             | Time (s)
+-----------------------------------------------------------------
+Remove 10K existing keysfrom map                     | 0.013238  |
+-----------------------------------------------------------------
+Remove 10K existing key from range map               | 0.060113  |
+-----------------------------------------------------------------
+
+To see the detail of the above results, have a look at the `examples` project. 
+
+
+Implementation
+--------------------
+The provided implementation for `IRangeMap` is a simple [AVL] tree. Each destructive operation on the tree, preserves a strict balance, where the difference between the maximum height of a the left and right sub-trees of any node is at most one.
+
+
+[AVL]:http://en.wikipedia.org/wiki/AVL_tree
 
 
 
