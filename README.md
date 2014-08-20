@@ -8,20 +8,20 @@ Usage
 values with integer keys and string values:
 
 ```fsharp
-    > open FSharp.Data.RangeMap
-    > let myMap = fromSeq <| List.init 10000 (fun ix -> (ix, string ix))
-    val myMap : IRangeMap<int,string>
+> open FSharp.Data.RangeMap
+> let myMap = fromSeq <| List.init 10000 (fun ix -> (ix, string ix))
+val myMap : IRangeMap<int,string>
     
 ```
 
 To lookup an element by it's key, use the function `lookup`:
 
 ```fsharp
-    > let res = lookup 1024 myMap;;
-    val res : string option = Some "1024"
+> let res = lookup 1024 myMap;;
+val res : string option = Some "1024"
     
-    > let res2 = lookup -2000 myMap;;
-    val res2 : string option = None
+> let res2 = lookup -2000 myMap;;
+val res2 : string option = None
     
 ```
 
