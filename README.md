@@ -87,7 +87,7 @@ val myMap2 : IRangeMap<int,int>
 The following invariant holds for any `RangeMap` `rm` and feasible function `f`: 
 
 ```fhsarp
-(map f >> elements) = (elements >> List.map (fun (k,v) -> (k, f v)))`
+(map f >> elements) = (elements >> List.map (fun (k,v) -> (k, f v)))
 ```
 Performance
 --------------------
