@@ -11,7 +11,6 @@ Usage
 > open FSharp.Data.RangeMap
 > let myMap = fromSeq <| List.init 10000 (fun ix -> (ix, string ix))
 val myMap : IRangeMap<int,string>
-    
 ```
 
 To lookup a single element by it's key, the function `lookup` is provided:
@@ -22,8 +21,8 @@ val res : string option = Some "1024"
     
 > let res2 = lookup -2000 myMap;;
 val res2 : string option = None
-    
 ```
+
 As seen in the example above, looking up a non-existing key yields the result `None`.
 
 The existense of a key can be be tested using `containsKey`:
@@ -34,7 +33,6 @@ val containsFive : bool = true
 
 > let containsMinusFive = containsKey -5 myMap;;
 val containsMinusFive : bool = false
-
 ```
 
 It's also possible to lookup elements by a range of keys. Here is an example of fiding all elements with keys within the range 5 to 10:
@@ -42,7 +40,6 @@ It's also possible to lookup elements by a range of keys. Here is an example of 
 ```fsharp
 > let res = lookupRange (Some 5) (Some 10) myMap;;
 val res : string list = ["5"; "6"; "7"; "8"; "9"; "10"]
-
 ```
 
 The first two parameters to `lookupRange` are optional values indicating the lower and higher bounds.
@@ -65,7 +62,6 @@ val myMap : IRangeMap<int,string>
 
 > let containsFive = containsKey 5 myMap;;
 val containsFive : bool = false
-
 ```
 
 There is also the possibility to remove elements for given a range of key values:
@@ -85,13 +81,14 @@ To map over the values of the elements in a `IRangeMap`, `map` is used:
 ```fsharp
 > let myMap2 = map Seq.length myMap;;
 val myMap2 : IRangeMap<int,int>
-```fsharp
+```
 
 The following invariant holds for any `RangeMap` `rm` and feasible function `f`: 
 
 ```fhsarp
 (map f >> elements) = (elements >> List.map (fun (k,v) -> (k, f v)))`
-```fsharp
+```
+
 
 Perforamce
 --------------------
@@ -105,36 +102,31 @@ generated using randdom integer keys:
 
 | Comments                                         | Time (s)  |
 |--------------------------------------------------|----------:|
-| Lookup 10K existing keys from standar map        | 0.002713  |
+| Lookup 10K existing keys from map                | 0.002713  |
 | Lookup 10K existing keys from range-map          | 0.002183  |
 | Lookup 10K existing keys from dictionary         | 0.003557  |
 
 
-What's interesting here are the relative times. As can be seen RangeMap is fast than both `Dictionary` and `Map`.
+What is interesting here are the relative times. As can be seen RangeMap is fast than both `Dictionary` and `Map`.
 
 
-The next table instead show the total time of looking up non-existing keys:
+The next table shows the total time of looking up non-existing keys for the same collections:
 
 | Comments                                             | Time (s)  |
-| ------------------------------------------------------------------
+|:-----------------------------------------------------|----------:|
 | Lookup 10K non-existing keys from map                | 0.002947  |
-| --------------------------------------------------------------
 | Lookup 10K non-existing keys from range-map          | 0.002185  |
-| --------------------------------------------------------------
 |Lookup 10K non-existing keys from dictionary          | 0.001808  |
-| ------------------------------------------------------------------
 
-This time `Dictionary` is faster and the ration between `RangeMap` and `Map` is similar.
+This time `Dictionary` is faster. The values for `RangeMap` and `Map` are not significantly affected.
 
 
 Building and removing elements from `RangeMap`s are consdirebly slower than the equivalent functions on `Map`:
 
 | Comments                                             | Time (s)  | 
-| -----------------------------------------------------------------
+|:----------------------------------------------------:|-----------|
 | Remove 10K existing keysfrom map                     | 0.013238  |
-|-----------------------------------------------------------------
 | Remove 10K existing key from range map               | 0.060113  |
-| -----------------------------------------------------------------
 
 To see the detail of the above results, have a look at the `examples` project. 
 
