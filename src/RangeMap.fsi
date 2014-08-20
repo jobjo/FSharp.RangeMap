@@ -7,8 +7,9 @@ module RangeMap =
         abstract member Elements : unit -> list<'K * 'V>
         abstract member Lookup : 'K -> option<'V>
         abstract member Remove : 'K -> IRangeMap<'K, 'V>
-        abstract member LookupRange : option<'K> -> option<'K> -> list<'V>
+        abstract member RemoveRange : option<'K> -> option<'K> -> IRangeMap<'K,'V>
         abstract member Insert : 'K -> 'V -> IRangeMap<'K,'V>
+        abstract member LookupRange : option<'K> -> option<'K> -> list<'V>
         abstract member Map<'U> : ('V -> 'U) -> IRangeMap<'K,'U>
 
     /// Builds a range map from a sequence of key and value pairs.
@@ -25,6 +26,9 @@ module RangeMap =
 
     /// Removes the element with the given key from a range map.
     val inline remove : 'K -> IRangeMap<'K,'V> -> IRangeMap<'K,'V>
+
+    /// Removes all elements within the given range of keys.
+    val inline removeRange : option<'K> -> option<'K> -> IRangeMap<'K,'V> -> IRangeMap<'K,'V>
 
     /// Returns true if there exists an element with the key.
     val inline containsKey : 'K -> IRangeMap<'K, 'V> -> bool

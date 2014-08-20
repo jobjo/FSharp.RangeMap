@@ -9,6 +9,7 @@ module RangeMap =
         abstract member Elements : unit -> list<'K * 'V>
         abstract member Lookup : 'K -> option<'V>
         abstract member Remove : 'K -> IRangeMap<'K, 'V>
+        abstract member RemoveRange : option<'K> -> option<'K> -> IRangeMap<'K,'V>
         abstract member Insert : 'K -> 'V -> IRangeMap<'K,'V>
         abstract member LookupRange : option<'K> -> option<'K> -> list<'V>
         abstract member Map<'U> : ('V -> 'U) -> IRangeMap<'K,'U>
@@ -19,6 +20,7 @@ module RangeMap =
             member this.Elements () = elements tree
             member this.Lookup (k: 'K) = lookup k tree
             member this.Remove (k: 'K) = fromTree <| remove k tree
+            member this.RemoveRange l h = fromTree <| removeRange l h tree
             member this.Insert (k: 'K) (v: 'V) = fromTree <| insert k v tree
             member this.LookupRange low high = lookupRange low high tree
             member this.Map<'U> (f: 'V -> 'U) = fromTree <| map f tree
@@ -40,8 +42,11 @@ module RangeMap =
     /// Tries to find the value of an element with the given key.
     let inline lookup k (rm: IRangeMap<'K, 'V>) = rm.Lookup k
 
-    /// Tries to find the value of an element with the given key.
+    /// Removes an element with the given key if exists.
     let inline remove k (rm: IRangeMap<'K, 'V>) = rm.Remove k
+
+    /// Tries to find the value of an element with the given key.
+    let inline removeRange l h (rm: IRangeMap<'K, 'V>) = rm.RemoveRange l h
 
     /// Returns true if there exists an element with the key.
     let inline containsKey k (rm: IRangeMap<'K, 'V>) = Option.isSome <| rm.Lookup k 

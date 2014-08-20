@@ -116,7 +116,7 @@
         fromSeqGeneric compare<'K> kvs
 
     /// Merges two trees.
-    let merge l r =
+    let inline merge l r =
         // Removes the largest element from the tree.
         let removeLargest tree =
             let rec go tree cont = 
@@ -159,30 +159,30 @@
 
     /// Removes a node with the given key.
     let removeGeneric compare k tree  =
-        let rec go k tree c =
+        let rec go tree cont =
             match tree with
             | Leaf                      ->
-                c Leaf
+                cont Leaf
             | Node ((k',_) as kv, h, l, r)    ->
                 match compare k k' with
                 | -1    ->
                     // Remove from left branch
-                    go k l <| fun l'    ->
-                        let tree = node kv l' r
-                        c <| if balance tree <= lowBalance then rotateLeft tree else tree
+                    go l <| fun l'    ->
+                        node kv l' r |> balanceTree |> cont
                 | 0     ->
-                    c <| merge l r
+                    merge l r |> balanceTree |> cont
                 | _     ->
                     // Remove from right branch
-                    go k r <| fun r' ->
-                        let tree = node kv l r'
-                        c <| if balance tree >= highBalance then rotateRight tree else tree
-        go k tree id
+                    go r <| fun r' ->
+                        node kv l r'  |> balanceTree |> cont
+        go tree id
 
     /// Removes the element with the given key.
     let remove<'K,'V when 'K : comparison> (k: 'K) (t: Tree<'K,'V>) : Tree<'K,'V> = 
         removeGeneric compare<'K> k t
 
+
+    /// Lookup item based on key and comparison function.
     let  inline lookupGeneric<'K,'V> compare =
         fun (key: 'K) (tree: Tree<'K, 'V>) ->
             let rec go  = function
@@ -215,7 +215,7 @@
         List.ofSeq list
 
     /// Lookup elements within a range.
-    let inline lookupRangeGeneric compare (low, high) tree =
+    let inline selectRangeGeneric compare (low, high) f tree =
         let list = System.Collections.Generic.List<_>()
         let rec go = function
             | Leaf                  ->
@@ -228,14 +228,26 @@
                     go l
                 | _                     ->
                     go l 
-                    list.Add(v)
+                    list.Add <| f (k,v)
                     go r
         go tree
         List.ofSeq list
+
+    /// Removes a range of values using the given comparison function.
+    let removeRangeGeneric<'K,'V> (compare: 'K -> 'K -> int) =
+        fun (low: option<'K>) (high: option<'K>) (tree: Tree<'K,'V>) ->
+            let kvs = selectRangeGeneric compare (low, high) fst tree
+            Seq.fold (fun tree k -> removeGeneric compare k tree) tree kvs
+
+    /// Removes a range of values.
+    let removeRange<'K,'V when 'K : comparison>  =
+        let comparer = LanguagePrimitives.FastGenericComparer<'K> 
+        let inline compare (x:'K) (y:'K) = comparer.Compare (x,y)
+        fun l h t -> removeRangeGeneric<'K,'V> compare l h t
 
     /// Lookup elements within a range.
     let inline lookupRange<'K,'V when 'K : comparison> =
         let comparer = LanguagePrimitives.FastGenericComparer<'K> 
         let inline compare (x:'K) (y:'K) = comparer.Compare (x,y)
         fun low high (tree: Tree<'K,'V>)  ->
-            lookupRangeGeneric compare (low, high) tree
+            selectRangeGeneric compare (low, high) snd tree

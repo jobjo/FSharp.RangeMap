@@ -20,6 +20,9 @@ module Tree =
     /// Removes an element with the given key, if exists.
     val remove<'K,'V when 'K : comparison> : 'K -> Tree<'K,'V> -> Tree<'K,'V>
 
+    /// Removes all elements with keys within the given range.
+    val removeRange<'K,'V when 'K : comparison> : (option<'K> -> option<'K> -> Tree<'K,'V> -> Tree<'K,'V>)
+
     /// Tries to lookup an element with the given key. Returns 'None' if the key is present.
     val inline lookup<'K,'V when 'K : comparison> : ('K -> Tree<'K,'V> -> option<'V>)
 

@@ -6,11 +6,7 @@ module RangeMap =
     open FSharp.Data.RangeMap.RangeMap
     open FsCheck.Xunit
 
-    
     let private (==) t1 t2 = elements t1 = elements t2
-    
-
-
 
     [<Property>]
     let ``RangeMap - All elements are inserted`` (xs: list<int * string>) =
@@ -31,7 +27,25 @@ module RangeMap =
         t2 == empty
 
     [<Property>]
-    let ``RangeMap - Element accessible after insertion`` (xs: list<int * string>) (k: int) (v: string) =
+    let ``Tree - Remove a range of values removes all values within the given range`` (kvs: list<int * int>) (low: int) (high: int) =
+        let t = fromSeq kvs
+        let low, high = min low high, max low high
+        let manElems f =
+            elements t
+            |> List.filter (fun (k,_) -> f k)
+            |> List.map fst
+        [
+            removeRange None None t, manElems (fun _ -> false)
+            removeRange None (Some high) t, manElems (fun k -> k > high)
+            removeRange (Some low) None t, manElems (fun k -> k < low)
+            removeRange (Some low) (Some high) t, manElems (fun k -> k < low || k > high)
+        ]
+        |> List.forall (fun (t',y) ->
+            Set.ofList (elements t' |> List.map fst) = Set.ofList y
+        )
+
+    [<Property>]
+    let ``RangeMap - Element accessible after removal`` (xs: list<int * string>) (k: int) (v: string) =
         let t = fromSeq xs
         let t'= insert k v t
         lookup k t' = Some v

@@ -69,6 +69,42 @@ module Tree =
         |> List.forall id
 
     [<Property>]
+    let ``Tree - Remove a range of values removes all values within the given range`` (xs: list<int * int>) (low: int) (high: int) =
+        let t = T.fromSeq xs
+        let low, high = min low high, max low high
+        let manElems f =
+            elements t
+            |> List.filter (fun (k,_) -> f k)
+            |> List.map fst
+        [
+            removeRange None None t, manElems (fun _ -> false)
+            removeRange None (Some high) t, manElems (fun k -> k > high)
+            removeRange (Some low) None t, manElems (fun k -> k < low)
+            removeRange (Some low) (Some high) t, manElems (fun k -> k < low || k > high)
+        ]
+        |> List.forall (fun (t',y) ->
+            Set.ofList (elements t' |> List.map fst) = Set.ofList y
+        )
+
+    [<Property>]
+    let ``Tree - Remove a range of values preserves balance`` (xs: list<int * int>) (low: int) (high: int) =
+        let t = T.fromSeq xs
+        let low, high = min low high, max low high
+        [
+            None, None
+            None, (Some high)
+            (Some low), None 
+            (Some low), (Some high)
+        ]
+        |> List.forall (fun (l,h) ->
+            let t' = (removeRange l h t)
+            if not <| isBalanced t' then
+                printfn "Tree is not balanced %A" t'
+            isBalanced (removeRange l h t)
+        )
+
+
+    [<Property>]
     let ``Tree - Element accessible after insertion`` (xs: list<int * string>) (k: int) (v: string) =
         let t = T.fromSeq xs
         let t'= T.insert k v t
