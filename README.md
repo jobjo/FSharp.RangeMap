@@ -6,7 +6,6 @@ Usage
 ---------
 `RangeMap`s can be created by using the `fromSeq` function. Here's and example defining a range-map holding 10000
 values with integer keys and string values:
-
 ```fsharp
 > open FSharp.Data.RangeMap
 > let myMap = fromSeq <| List.init 10000 (fun ix -> (ix, string ix))
@@ -15,7 +14,6 @@ val myMap : IRangeMap<int,string>
 ```
 
 To lookup a single element by it's key, the function `lookup` is provided:
-
 ```fsharp
 > let res = lookup 1024 myMap;;
 val res : string option = Some "1024"
@@ -87,7 +85,7 @@ To map over the values of the elements in a `RangeMap`, `map` is used:
 val myMap2 : IRangeMap<int,int>
 ```fsharp
 
-The following invariant holds: `map f >> elements == elements >> List.map (fun (k,v) -> (k, f v))`
+The following invariant holds: `map f >> elements == elements >> List.map (fun (k,v) -> (k, f v))`.
 
 
 
