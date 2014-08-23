@@ -162,7 +162,7 @@ The next table displays the total time of looking up non-existing keys for the s
 This time `Dictionary` is faster. The values for *RangeMap* and *Map* are not significantly affected.
 
 
-The next table reveals that building and removing elements from *RangeMap*s are considerably slower than the equivalent functions on *Map*s.
+The next table reveals that building and removing elements from *RangeMaps* are considerably slower than the equivalent functions on *Map*s.
 
 | Operation                                            | Time (s)  | 
 |:-----------------------------------------------------|----------:|
@@ -170,7 +170,7 @@ The next table reveals that building and removing elements from *RangeMap*s are 
 | Remove 10K existing key from range map               | 0.0601    |
 
 
-The memory footprint of *RangeMap*s seems to be slightly worse comparing with corresponding ones for *Map*s:
+The memory footprint of *RangeMaps* seems to be slightly worse comparing with corresponding ones for *Maps*:
 
 | Operation                                            | MB       | 
 |:-----------------------------------------------------|---------:|
