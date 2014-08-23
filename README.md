@@ -1,6 +1,6 @@
 FSharp.RangeMap
 ===============
-*IRangeMap* is an immutable key-value data store interface, similar to the standard FSharp *FSharp.Collections.Map* library. The most important difference, compared to the `Map` interface, is the ability to (efficiently) looking up values from a range of keys. That is also the primary motivation behind the creation of this library.
+*IRangeMap* is an immutable key-value data store interface, similar to the standard FSharp *Map* library. The most important difference, compared to the `Map` interface, is the ability to (efficiently) looking up values from a range of keys. That is also the primary motivation behind the creation of this library.
 
 The provided *IRangeMap* implementation seems to perform slightly better than `Map` for key based look ups. It is currently slower than *Map* when it comes to inserting and removing elements. 
 
