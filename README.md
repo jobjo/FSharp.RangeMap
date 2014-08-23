@@ -1,6 +1,8 @@
 FSharp.RangeMap
 ===============
-*RangeMap* is an immutable key-value data store similar to the standard FSharp *Map* implementation. The most important difference, compared to the `Map` interface, is the ability to efficiently look up values from a range of keys. While *RangeMap* seems to perform slightly better than `Map` for looking up elements, it is considerably slower when it comes to *inserting* and *removing* elements.
+*IRangeMap* is an immutable key-value data store interface, similar to the standard FSharp *FSharp.Collections.Map* library. The most important difference, compared to the `Map` interface, is the ability to (efficiently) looking up values from a range of keys. That is also the primary motivation behind the creation of this library.
+
+The provided *IRangeMap* implementation seems to perform slightly better than `Map` for key based look ups. It is currently slower than *Map* when it comes to inserting and removing elements. 
 
 
 Usage
@@ -89,6 +91,46 @@ The following invariant holds for any `RangeMap` `rm` and feasible function `f`:
 ```fhsarp
 (map f >> elements) = (elements >> List.map (fun (k,v) -> (k, f v)))
 ```
+
+Creating Custom RangeMaps
+-----------------------------
+It is possible to create custom implementations of the *IRangeMap* interface. Here is and example defining a naive implementation based on simple lists:
+
+```fsharp
+let rec fromList<'K,'V when 'K : comparison> (list: List<'K * 'V>) : IRangeMap<'K,'V> =
+    let inRange l h k =
+        match l, h with
+        | Some l, _  when k < l -> true
+        | _, Some h when k > h  -> true
+        | _                     -> false
+    { new IRangeMap<'K,'V> with
+        member this.Elements () = list
+        member this.Lookup k = 
+            List.tryPick (fun (k',v) -> if k' = k then Some v else None) list
+        member this.Remove (k: 'K) = 
+            fromList <| List.filter (fun (k',v) -> k <> k' ) list
+        member this.RemoveRange l h = 
+            fromList <| List.filter (fun (k,v) -> inRange l h k ) list
+        member this.Insert k v = 
+            let list' = List.filter (fun (k',v) -> k <> k' ) list
+            fromList ((k,v) :: list')
+        member this.LookupRange l h = 
+            List.filter (fst >> inRange l h) list  |> List.map snd
+        member this.Map<'U> (f: 'V -> 'U) =
+            fromList <| List.map (fun (k,v) -> (k, f v)) list
+    }
+```
+
+The existing operators on *IRangeMap* are now available:
+
+```fsharp
+> let myListMap = fromList <| List.map (fun x -> (x,x)) [1 .. 100]
+> let range = lookupRange (Some 10) (Some 15) myListMap
+val range : int list = [10; 11; 12; 13; 14; 15]
+
+```
+
+
 Performance
 --------------------
 Inital benchmarking indicates that `FSharp.RangeMap` is on par with, or faster than the standard FSharp `Map` implementation in terms of looking up elements using the `lookup` function. 
@@ -128,12 +170,25 @@ The next table reveals that building and removing elements from `RangeMap`s are 
 | Remove 10K existing key from range map               | 0.0601    |
 
 
+The memory footprint of *RangeMaps* seems to be slightly worse comparing with corresponding ones for *Map*s:
 
+| Operation                                            | MB       | 
+|:-----------------------------------------------------|---------:|
+| Dictionary with 10K elements                         | 0.4      |
+| Map with 10K elements                                | 0.2      |
+| RangeMap with 10K elements                           | 0.3      |
+|                                                      |          | 
+| Dictionary with 100K elements                        | 3.0      |
+| Map with 100K elements                               | 2.2      |
+| RangeMap with 100K elements                          | 2.2      |
+
+| Dictionary with 1M elements                          | 26.6     |
+| Map with 1M elements                                 | 22.4     |
+| RangeMap with 1M elements                            | 26.7     |
 
 Implementation
 --------------------
-The provided implementation for `IRangeMap` is a simple [AVL] tree. Each destructive operation on the tree, preserves a strict balance, where the difference between the maximum height of a the left and right sub-trees of any node is at most one.
-
+The default implementation for `IRangeMap` is a simple [AVL] tree. Each destructive operation on the tree, preserves a strict balance, where the difference between the maximum height of a the left and right sub-trees of any node is at most one.
 
 [AVL]:http://en.wikipedia.org/wiki/AVL_tree
 
