@@ -77,7 +77,7 @@ val myMap : IRangeMap<int,string>
 val contains20 : bool = false
 ```
 
-The function `elements` retrives all key-value pairs of `RangeMap` and is equivalent to `lookupRange None None`.
+The function `elements` retrives all key-value pairs of *RangeMap* and is equivalent to `lookupRange None None`.
 
 To map over the values of the elements in a `IRangeMap`, `map` is used:
 
@@ -86,13 +86,13 @@ To map over the values of the elements in a `IRangeMap`, `map` is used:
 val myMap2 : IRangeMap<int,int>
 ```
 
-The following invariant holds for any `RangeMap` `rm` and feasible function `f`: 
+The following invariant holds for any *RangeMap* `rm` and feasible function `f`: 
 
 ```fhsarp
 (map f >> elements) = (elements >> List.map (fun (k,v) -> (k, f v)))
 ```
 
-Creating Custom RangeMaps
+Creating custom *RangeMap*s
 -----------------------------
 It is possible to create custom implementations of the *IRangeMap* interface. Here is and example defining a naive implementation based on simple lists:
 
@@ -133,7 +133,7 @@ val range : int list = [10; 11; 12; 13; 14; 15]
 
 Performance
 --------------------
-Inital benchmarking indicates that `FSharp.RangeMap` is on par with, or faster than the standard FSharp `Map` implementation in terms of looking up elements using the `lookup` function. 
+Inital benchmarking indicates that `FSharp.RangeMap` is on par with, or faster than the standard FSharp *Map* implementation in terms of looking up elements using the `lookup` function. 
 
 Below are some result of comparing lookup for Fharp *Map*, *RangeMap* and standard .NET dictionaries. Have a look at the *examples project* for details.
 
@@ -159,10 +159,10 @@ The next table displays the total time of looking up non-existing keys for the s
 | Lookup 10K non-existing keys from range-map          | 0.0022    |
 | Lookup 10K non-existing keys from dictionary         | 0.0018    |
 
-This time `Dictionary` is faster. The values for `RangeMap` and `Map` are not significantly affected.
+This time `Dictionary` is faster. The values for *RangeMap* and *Map* are not significantly affected.
 
 
-The next table reveals that building and removing elements from `RangeMap`s are considerably slower than the equivalent functions on *Map*s.
+The next table reveals that building and removing elements from *RangeMap*s are considerably slower than the equivalent functions on *Map*s.
 
 | Operation                                            | Time (s)  | 
 |:-----------------------------------------------------|----------:|
