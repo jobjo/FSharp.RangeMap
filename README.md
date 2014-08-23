@@ -1,8 +1,8 @@
 FSharp.RangeMap
 ===============
-*IRangeMap* is an immutable key-value data store interface, similar to the standard FSharp *Map* library. The most important difference, compared to the `Map` interface, is the ability to (efficiently) looking up values from a range of keys. That is also the primary motivation behind the creation of this library.
+*IRangeMap* is an immutable key-value data store interface, similar to the standard FSharp *Map* library. The most important difference, compared to the *Map* interface, is the ability to (efficiently) looking up values from a range of keys. That is also the primary motivation behind the creation of this library.
 
-The provided *IRangeMap* implementation seems to perform slightly better than `Map` for key based look ups. It is currently slower than *Map* when it comes to inserting and removing elements. 
+The provided *IRangeMap* implementation seems to perform slightly better than *Map* for key based look ups. It is currently slower than *Map* when it comes to inserting and removing elements. 
 
 
 Usage
@@ -135,7 +135,7 @@ Performance
 --------------------
 Inital benchmarking indicates that `FSharp.RangeMap` is on par with, or faster than the standard FSharp `Map` implementation in terms of looking up elements using the `lookup` function. 
 
-Below are some result of comparing lookup for Fharp `Map`, `RangeMap` and standard .NET dictionaries. Have a look at the *examples project* for details.
+Below are some result of comparing lookup for Fharp *Map*, *RangeMap* and standard .NET dictionaries. Have a look at the *examples project* for details.
 
 The following table shows the average total time for looking up 10000 existing keys from collections holding 100000 elements, generated using random integer as keys:
 
@@ -162,7 +162,7 @@ The next table displays the total time of looking up non-existing keys for the s
 This time `Dictionary` is faster. The values for `RangeMap` and `Map` are not significantly affected.
 
 
-The next table reveals that building and removing elements from `RangeMap`s are considerably slower than the equivalent functions on *Maps*.
+The next table reveals that building and removing elements from `RangeMap`s are considerably slower than the equivalent functions on *Map*s.
 
 | Operation                                            | Time (s)  | 
 |:-----------------------------------------------------|----------:|
@@ -170,7 +170,7 @@ The next table reveals that building and removing elements from `RangeMap`s are 
 | Remove 10K existing key from range map               | 0.0601    |
 
 
-The memory footprint of *RangeMaps* seems to be slightly worse comparing with corresponding ones for *Map*s:
+The memory footprint of *RangeMap*s seems to be slightly worse comparing with corresponding ones for *Map*s:
 
 | Operation                                            | MB       | 
 |:-----------------------------------------------------|---------:|
