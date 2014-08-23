@@ -1,12 +1,11 @@
-﻿namespace FSharp.Data.RangeMap.Internal
+﻿namespace FSharp.Collections.RangeMap.Internal
 
 module Tree =
 
     [<CompilationRepresentation(CompilationRepresentationFlags.UseNullAsTrueValue)>]
-    [<NoEquality; NoComparison>]
     type Tree<'K, 'V> =
         | Leaf
-        | Node of ('K * 'V) * byte * Tree<'K,'V> * Tree<'K,'V>
+        | Node of 'K * 'V * byte * Tree<'K,'V> * Tree<'K,'V>
 
     /// Maps over the values of a tree.
     val map : ('V -> 'U) -> Tree<'K,'V> -> Tree<'K, 'U>

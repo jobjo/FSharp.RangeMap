@@ -1,9 +1,9 @@
-﻿namespace FSharp.Data.RangeMap.Tests
+﻿namespace FSharp.Collections.RangeMap.Tests
 
 module RangeMap =
 
-    open FSharp.Data.RangeMap
-    open FSharp.Data.RangeMap.RangeMap
+    open FSharp.Collections.RangeMap
+    open FSharp.Collections.RangeMap.RangeMap
     open FsCheck.Xunit
 
     let private (==) t1 t2 = elements t1 = elements t2

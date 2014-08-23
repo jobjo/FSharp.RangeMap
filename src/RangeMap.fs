@@ -1,8 +1,8 @@
-﻿namespace FSharp.Data.RangeMap
+﻿namespace FSharp.Collections.RangeMap
 
 [<AutoOpen>]
 module RangeMap =
-    open FSharp.Data.RangeMap.Internal.Tree
+    open FSharp.Collections.RangeMap.Internal.Tree
 
     /// Map interface
     type IRangeMap<'K,'V> =

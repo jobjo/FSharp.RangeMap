@@ -1,6 +1,12 @@
-﻿namespace FSharp.RangeMap.Examples
+﻿namespace FSharp.Collections.RangeMap.Examples
 
 module internal Utils =
+
+
+    // Return current used memory in MBs.
+    let getCurrentMemory () =
+        let mem = System.GC.GetTotalMemory(true)
+        System.Math.Round((float mem) / (System.Math.Pow(2.,20.)), 1)
 
     let time f =
         let sw = new System.Diagnostics.Stopwatch()
@@ -9,6 +15,12 @@ module internal Utils =
         sw.Stop();
         let ts = sw.Elapsed;
         x,  System.Math.Round(ts.TotalMilliseconds / 1000., 4)
+    
+    let timeAndMemory f =
+        let m1 = getCurrentMemory()
+        let res, t = time f
+        let m2 = getCurrentMemory()
+        res, t, (m2 - m1)
 
     let rec repeate n f = if n <= 0 then () else f () ; repeate (n-1) f
 

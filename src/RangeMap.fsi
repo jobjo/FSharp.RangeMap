@@ -1,5 +1,6 @@
-﻿namespace FSharp.Data.RangeMap
+﻿namespace FSharp.Collections.RangeMap
 
+[<AutoOpen>]
 module RangeMap =
 
     /// Map interface

@@ -1,10 +1,10 @@
-﻿namespace FSharp.Data.RangeMap.Tests
+﻿namespace FSharp.Collections.RangeMap.Tests
 
 module Tree =
 
    
-    open FSharp.Data.RangeMap.Internal.Tree
-    module T = FSharp.Data.RangeMap.Internal.Tree
+    open FSharp.Collections.RangeMap.Internal.Tree
+    module T = FSharp.Collections.RangeMap.Internal.Tree
 
     open FsCheck.Xunit
 
@@ -14,19 +14,19 @@ module Tree =
 
     let rec realHeight = function
         | Leaf              -> 1
-        | Node (_,_,l,r)    -> 1 + max (realHeight l) (realHeight r)
+        | Node (_,_,_,l,r)  -> 1 + max (realHeight l) (realHeight r)
 
     let rec isBalanced = function
         | Leaf              -> 
             true
-        | Node (_,_,l,r)    ->
+        | Node (_,_,_,l,r)  ->
             let diff = abs <| realHeight l - realHeight r
             diff <= 2 && isBalanced l && isBalanced r
 
     let rec hasCorrectHeights = function
-        | Leaf              ->
+        | Leaf                  ->
             true
-        | Node (_,h,l,r) as t   ->
+        | Node (_,_,h,l,r) as t ->
             int h = realHeight t 
             && hasCorrectHeights l 
             && hasCorrectHeights r

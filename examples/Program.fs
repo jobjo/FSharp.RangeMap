@@ -1,11 +1,9 @@
-﻿namespace FSharp.RangeMap.Examples
+﻿namespace FSharp.Collections.RangeMap.Examples
 
 module Main =
 
     open Utils
-    open FSharp.Data.RangeMap
-    module RM = FSharp.Data.RangeMap.RangeMap
-
+    module RM = FSharp.Collections.RangeMap.RangeMap
 
     let benchmarks numElems =
         // Generate a list of elements.
@@ -14,16 +12,16 @@ module Main =
             List.map (fun x -> (x,x)) (randomList size)
 
         // Create a standard .NET dictionary containing all elements.
-        let dict, tm = time <| fun _ -> dict<_,_>(elements)
-        printfn "Dictionary created in: %As" tm
+        let dict, tm, mem = timeAndMemory <| fun _ -> dict<_,_>(elements)
+        printfn "Dictionary created in: %As %AMB allocated" tm mem
 
         // Create a FSharp map with all elements.
-        let map, tm = time <| fun _ -> Map.ofSeq elements
-        printfn "Map created in: %As" tm
+        let map, tm, mem = timeAndMemory <| fun _ -> Map.ofSeq elements
+        printfn "Map created in: %As %AMB allocated" tm mem
 
         // Create a Range Map holding the elements.
-        let rm, tm = time <| fun _ -> RM.fromSeq elements
-        printfn "Range map created in %As" tm
+        let rm, tm, mem = timeAndMemory <| fun _ -> RM.fromSeq elements
+        printfn "RangeMap created in: %As %AMB allocated" tm mem
 
         // Iterate over 10K randomly selected existing keys.
         let withExistingKeys =
@@ -102,11 +100,9 @@ module Main =
             ]
             |> benchmark 100
         [res1; res2; res3; res4]
-
-
+    
     [<EntryPoint>]
     let main argv = 
-        let numElems = 1e5
 
         printfn "\nResults with 10K elements\n"
         printLabelTimeResults <| benchmarks 1e4
