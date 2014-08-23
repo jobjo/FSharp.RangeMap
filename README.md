@@ -176,12 +176,10 @@ The memory footprint of *RangeMap*s seems to be slightly worse comparing with co
 |:-----------------------------------------------------|---------:|
 | Dictionary with 10K elements                         | 0.4      |
 | Map with 10K elements                                | 0.2      |
-| RangeMap with 10K elements                           | 0.3      |
-|                                                      |          | 
+| RangeMap with 10K elements                           | 0.3      |                                                 
 | Dictionary with 100K elements                        | 3.0      |
 | Map with 100K elements                               | 2.2      |
 | RangeMap with 100K elements                          | 2.2      |
-
 | Dictionary with 1M elements                          | 26.6     |
 | Map with 1M elements                                 | 22.4     |
 | RangeMap with 1M elements                            | 26.7     |
