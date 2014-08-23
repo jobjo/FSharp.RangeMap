@@ -1,13 +1,13 @@
 FSharp.RangeMap
 ===============
-*IRangeMap* is an immutable key-value data store interface, similar to the standard FSharp *Map* library. The most important difference, compared to the *Map* interface, is the ability to (efficiently) looking up values from a range of keys. That is also the primary motivation behind the creation of this library.
+*IRangeMap* is an immutable key-value data store interface, similar to the standard FSharp [Map] library. The most important difference, compared to the *Map* interface, is the ability to (efficiently) looking up values from a range of keys. That is also the primary motivation behind the creation of this library.
 
 The provided *IRangeMap* implementation seems to perform slightly better than *Map* for key based look ups. It is currently slower than *Map* when it comes to inserting and removing elements. 
 
 
 Usage
 ---------
-`IRangeMap` values can be created by using the `fromSeq` function. Here's and example defining a range-map holding 10000 values with integer keys and string values:
+`IRangeMap` values can be created by using the `fromSeq` function. Here's and example defining a range-map holding 10,000 values with integer keys and string values:
 
 ```fsharp
 > open FSharp.Data.RangeMap
@@ -92,7 +92,7 @@ The following invariant holds for any *RangeMap* `rm` and feasible function `f`:
 (map f >> elements) = (elements >> List.map (fun (k,v) -> (k, f v)))
 ```
 
-Creating custom *RangeMap*s
+Creating custom RangeMaps
 -----------------------------
 It is possible to create custom implementations of the *IRangeMap* interface. Here is and example defining a naive implementation based on simple lists:
 
@@ -135,16 +135,16 @@ Performance
 --------------------
 Inital benchmarking indicates that `FSharp.RangeMap` is on par with, or faster than the standard FSharp *Map* implementation in terms of looking up elements using the `lookup` function. 
 
-Below are some result of comparing lookup for Fharp *Map*, *RangeMap* and standard .NET dictionaries. Have a look at the *examples project* for details.
+Below are some result of comparing lookup for Fharp *Map*, *RangeMap* and standard .NET [Dictionary]. Have a look at the *examples project* for details.
 
-The following table shows the average total time for looking up 10000 existing keys from collections holding 100000 elements, generated using random integer as keys:
+The following table shows the average total time for looking up 10,000 existing keys from collections holding 100,000 elements, generated using random integer as keys:
 
 
 | Operation                                        | Time (s)  |
 |:-------------------------------------------------|----------:|
-| Lookup 10K existing keys from map                | 0.0027    |
-| Lookup 10K existing keys from range-map          | 0.0022    |
-| Lookup 10K existing keys from dictionary         | 0.0036    |
+| Look up 10K existing keys from map                | 0.0027    |
+| Look up 10K existing keys from range-map          | 0.0022    |
+| Look up 10K existing keys from dictionary         | 0.0036    |
 
 
 What is interesting here are the relative times. As can be seen *RangeMap* is fast than both *Dictionary* and *Map*.
@@ -153,11 +153,11 @@ What is interesting here are the relative times. As can be seen *RangeMap* is fa
 The next table displays the total time of looking up non-existing keys for the same collections:
 
 
-| Operation                                            | Time (s)  |
-|:-----------------------------------------------------|----------:|
-| Lookup 10K non-existing keys from map                | 0.0029    |
-| Lookup 10K non-existing keys from range-map          | 0.0022    |
-| Lookup 10K non-existing keys from dictionary         | 0.0018    |
+| Operation                                             | Time (s)  |
+|:----------------------------------------------------- |----------:|
+| Look up 10K non-existing keys from map                | 0.0029    |
+| Look up 10K non-existing keys from range-map          | 0.0022    |
+| Look up 10K non-existing keys from dictionary         | 0.0018    |
 
 This time `Dictionary` is faster. The values for *RangeMap* and *Map* are not significantly affected.
 
@@ -191,6 +191,8 @@ Implementation
 The default implementation for `IRangeMap` is a simple [AVL] tree. Each destructive operation on the tree, preserves a strict balance, where the difference between the maximum height of a the left and right sub-trees of any node is at most one.
 
 [AVL]:http://en.wikipedia.org/wiki/AVL_tree
+[Map]:http://msdn.microsoft.com/en-us/library/ee353880.aspx
+[Dictionary]:http://msdn.microsoft.com/en-us/library/xfhwa508(v=vs.110).aspx
 
 
 
